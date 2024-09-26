@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" sizes="32x32" href="./images/favicon-32x32.png">
+  <link rel="stylesheet" href="index.css" />
+  <title>Frontend Mentor | E-commerce product page</title>
+</head>
+
+<body>
+  <div class="overlay hidden"></div>
+  <header class="nav">
+    <div class="nav-bar">
+      <img src="images/icon-menu.svg" class="menu" alt="nav-menu" />
+      <h1 class="title">sneakers</h1>
+      <ul class="side-menu hidden">
+        <img src="images/icon-close.svg" class="close-btn" alt="close-side" />
+        <li>Collections</li>
+        <li>Men</li>
+        <li>Women</li>
+        <li>About</li>
+        <li>Contact</li>
+      </ul>
+      <div class="nav-cart-ctn">
+        <img src="images/icon-cart.svg" class="nav-cart" alt="nav-cart" />
+        <span class="nav-cart-qty">0</span>
+      </div>
+      <img src="images/image-avatar.png" class="img avatar" alt="avatar" />
+      <div class="cart-modal hidden">
+        <p class="modal-title">Cart</p>
+        <hr />
+        <p class="cart-empty hidden">Your cart is empty.</p>
+        <div class="modal-body">
+          <img src="images/image-product-1-thumbnail.jpg" class="thumbnail" alt="thumbnail" />
+          <div class="modal-info">
+            <p class="modal-product-title">Fall Limited Edition Sneakers</p>
+            <div class="modal-money-ctn">
+              <p class="modal-price">$125.00 x<span class="modal-qty"></span><span class="modal-total"></span>
+              </p>
+            </div>
+          </div>
+          <img src="images/icon-delete.svg" class="delete-btn" alt="delete" />
+          <button class="checkout-btn">Checkout</button>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <section class="product-img-ctn column">
+      <div class="slideshow">
+        <!-- primary class on first image is for thumbnail JS test -->
+        <img src="images/image-product-1.jpg" class="img product-img slides fade primary" alt="product-1" />
+        <img src="images/image-product-2.jpg" class="img slides fade" alt="product-2" />
+        <img src="images/image-product-3.jpg" class="img slides fade" alt="product-3" />
+        <img src="images/image-product-4.jpg" class="img slides fade" alt="product-4" />
+        <img src="images/icon-previous.svg" class="arrows previous" alt="left-arrow" />
+        <img src="images/icon-next.svg" class="arrows next" alt="right-arrow" />
+        <div class="thumbnail-ctn">
+          <img src="images/image-product-1-thumbnail.jpg" class="img thumbnail" alt="product1" />
+          <img src="images/image-product-2-thumbnail.jpg" class="img thumbnail" alt="product2" />
+          <img src="images/image-product-3-thumbnail.jpg" class="img thumbnail" alt="product3" />
+          <img src="images/image-product-4-thumbnail.jpg" class="img thumbnail" alt="product4" />
+        </div>
+      </div>
+    </section>
+    <!-- test section -->
+    <section class="column lightbox hidden">
+      <div class="lb-slideshow">
+        <!-- primary class on first image is for thumbnail JS test -->
+        <!-- remove hidden class from images once JS is complete -->
+        <img src="images/image-product-1.jpg" class="product-img lb-slides fade lb-primary" alt="product-1" />
+        <img src="images/image-product-2.jpg" class="hidden lb-slides fade" alt="product-2" />
+        <img src="images/image-product-3.jpg" class="hidden lb-slides fade" alt="product-3" />
+        <img src="images/image-product-4.jpg" class="hidden lb-slides fade" alt="product-4" />
+        <div class="arrows-ctn">
+          <img src="images/icon-previous.svg" class="lb-arrows previous" alt="left-arrow" />
+          <img src="images/icon-next.svg" class="lb-arrows next" alt="right-arrow" />
+          <div class="lb-thumbnail-ctn">
+            <img src="images/image-product-1-thumbnail.jpg" class="img lb-thumbnail" alt="product1" />
+            <img src="images/image-product-2-thumbnail.jpg" class="img lb-thumbnail" alt="product2" />
+            <img src="images/image-product-3-thumbnail.jpg" class="img lb-thumbnail" alt="product3" />
+            <img src="images/image-product-4-thumbnail.jpg" class="img lb-thumbnail" alt="product4" />
+          </div>
+        </div>
+    </section>
+    <!-- end test section -->
+    <section class="product column">
+      <section class="product-ctn">
+        <section class="product-info">
+          <h2 class="company-name">SNEAKER COMPANY</h2>
+          <h3 class="product-title">Fall Limited Edition Sneakers</h3>
+          <p class="description">These low-profile sneakers are your perfect casual wear companion. Featuring a
+            durable rubber outer sole, they'll withstand everything the weather can offer.</p>
+          <div class="price-ctn">
+            <div class="flex-row">
+              <p class="price">$125.00</p>
+              <p class="discount">50%</p>
+            </div>
+            <div class="flex-row">
+              <p class="full-price">$250.00</p>
+            </div>
+          </div>
+        </section>
+        <section class="cart">
+          <div class="quantity-ctn">
+            <img src="images/icon-minus.svg" class="quantity-btn minus" alt="minus" />
+            <span class="quantity">0</span>
+            <img src="images/icon-plus.svg" class="quantity-btn plus" alt="plus" />
+          </div>
+          <button class="cart-btn">
+            <img src="images/icon-cart.svg" class="cart-icon" alt="cart-icon" />
+            Add to cart</button>
+        </section>
+      </section>
+    </section>
+  </main>
+  <!-- <footer>
+    <div class="attribution">
+    Challenge by <a href="https://www.frontendmentor.io?ref=challenge" target="_blank">Frontend Mentor</a>.
+    Coded by <a href="#">Your Name Here</a>.
+  </div>
+</footer> -->
+  <script src="index2.js"></script>
+</body>
+
+</html>
