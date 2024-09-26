@@ -137,7 +137,6 @@ showSlides(slideIndex);
 
 function showSlides(n) {
     let slides = document.getElementsByClassName("slides");
-    // array of the 4 images
 
     if (n > slides.length) {
         slideIndex = 1;
@@ -154,31 +153,24 @@ function showSlides(n) {
 
 // IMAGE SLIDESHOW - 'PREVIOUS' ARROW BUTTON:
 document.querySelector(".previous").addEventListener("click", () => {
-    console.log("Clicked previous");
     showSlides(--slideIndex);
-    console.log(slideIndex);
 });
 
 // IMAGE SLIDESHOW - 'NEXT' ARROW BUTTON:
 document.querySelector(".next").addEventListener("click", () => {
-    console.log("clicked next");
     showSlides(++slideIndex);
-    console.log(slideIndex);
 });
 
 // THUMBNAIL IMAGE CLICK (image swap):
 document.querySelectorAll(".thumbnail").forEach((el) => {
     el.addEventListener("click", () => {
         let elImgSrc = el.getAttribute("src");
-        console.log(elImgSrc);
-        // removes `-thumbnail.jpg` from thumbnail src, add back on .jpg
-        // matches the full size image src
         let swapSrc = `${elImgSrc.slice(0, 22)}.jpg`;
         document.querySelector(".primary").src = swapSrc;
     });
 });
 
-// TESTING lightbox product modal
+// Lightbox product modal:
 const LIGHTBOX = document.querySelector(".product-modal");
 
 document.querySelector(".primary").addEventListener("click", () => {
