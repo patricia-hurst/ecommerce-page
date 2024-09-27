@@ -1,33 +1,80 @@
-let quantity = 0;
+const fn = {
+    modifyClass(action, className, ...els) {
+        if (action === "add") {
+            els.forEach((el) => el.classList.add(className));
+        } else if (action === "remove") {
+            els.forEach((el) => el.classList.remove(className));
+        } else if (action === "toggle") {
+            els.forEach((el) => el.classList.toggle(className));
+        }
+    },
+
+    updateCart() {
+        if (cartQty === 0) {
+            // if cart empty, switch to "cart is empty" modal content
+            el.cart_modal_body.classList.remove("flex");
+            el.cart_modal_body.classList.add("hidden");
+            el.cart_modal_empty.classList.remove("hidden");
+        } else {
+            // cart isn't empty - display product info, update # values
+            el.cart_modal_body.classList.remove("hidden");
+            el.cart_modal_body.classList.add("flex");
+            el.cart_modal_empty.classList.add("hidden");
+            document.querySelector(".modal-qty").textContent = cartQty;
+            let total = (cartQty * 125).toFixed(2);
+            document.querySelector(".modal-total").textContent = `$${total}`;
+        }
+    },
+
+    showSlides(n, slideArr) {
+        if (n > slideArr.length) {
+            slideIndex = 1;
+        } else if (n < 1) {
+            slideIndex = slideArr.length;
+        }
+
+        for (let i = 0; i < slideArr.length; i++) {
+            slideArr[i].style.display = "none";
+        }
+        slideArr[slideIndex - 1].style.display = "block";
+    },
+
+    thumbnailSwap() {
+        document.querySelectorAll(".thumbnail").forEach((thumbnail) => {
+            thumbnail.addEventListener("click", () => {
+                // fn.swapImgSrc(thumbnail, ".primary");
+                let elImgSrc = thumbnail.getAttribute("src");
+                let swapSrc = `${elImgSrc.slice(0, elImgSrc.length - 14)}.jpg`;
+                document.querySelector(".primary").src = swapSrc;
+            });
+        });
+    },
+};
+
+const el = {
+    cart_modal: document.querySelector(".cart-modal"),
+    cart_modal_body: document.querySelector(".modal-body"),
+    cart_modal_empty: document.querySelector(".cart-empty"),
+    overlay: document.querySelector(".overlay"),
+    side_menu: document.querySelector(".side-menu"),
+    primary_slides: document.getElementsByClassName("slides"),
+    lightbox_slides: document.getElementsByClassName("lb-slides"),
+    lightbox: document.querySelector(".lightbox"),
+};
+
+let counter = 0;
 let cartQty = 0;
-let modalTotal = 0;
-
-const MODAL_EL = document.querySelector(".cart-modal");
-const MODAL_BODY = document.querySelector(".modal-body");
-const MODAL_EMPTY = document.querySelector(".cart-empty");
-const OVERLAY = document.querySelector(".overlay");
-const SIDE_MENU = document.querySelector(".side-menu");
-
-//** add/remove/toggle any class on 1 or more elements **//
-function modifyClass(action, className, ...elements) {
-    if (action === "add") {
-        elements.forEach((element) => element.classList.add(className));
-    } else if (action === "remove") {
-        elements.forEach((element) => element.classList.remove(className));
-    } else if (action === "toggle") {
-        elements.forEach((element) => element.classList.toggle(className));
-    }
-}
+let slideIndex = 1;
 
 // ESCAPE FUNCTION - closes cart modal, side menu OR lightbox:
 document.addEventListener("keyup", (e) => {
     if (e.key === "Escape") {
-        if (!MODAL_EL.classList.contains("hidden")) {
-            modifyClass("add", "hidden", MODAL_EL);
-        } else if (!SIDE_MENU.classList.contains("hidden")) {
-            modifyClass("add", "hidden", SIDE_MENU, OVERLAY);
-        } else if (!LIGHTBOX.classList.contains("hidden")) {
-            modifyClass("add", "hidden", LIGHTBOX, OVERLAY);
+        if (!el.cart_modal.classList.contains("hidden")) {
+            fn.modifyClass("add", "hidden", el.cart_modal);
+        } else if (!el.side_menu.classList.contains("hidden")) {
+            fn.modifyClass("add", "hidden", el.side_menu, el.overlay);
+        } else if (!el.lightbox.classList.contains("hidden")) {
+            fn.modifyClass("add", "hidden", el.lightbox, el.overlay);
         } else {
             return;
         }
@@ -35,144 +82,103 @@ document.addEventListener("keyup", (e) => {
 });
 
 // CLICK ON OVERLAY to close side menu OR lightbox:
-OVERLAY.addEventListener("click", () => {
-    if (!SIDE_MENU.classList.contains("hidden")) {
-        modifyClass("add", "hidden", SIDE_MENU, OVERLAY);
-    } else if (!LIGHTBOX.classList.contains("hidden")) {
-        modifyClass("add", "hidden", LIGHTBOX, OVERLAY);
+el.overlay.addEventListener("click", () => {
+    if (!el.side_menu.classList.contains("hidden")) {
+        fn.modifyClass("add", "hidden", el.side_menu, el.overlay);
+    } else if (!el.lightbox.classList.contains("hidden")) {
+        fn.modifyClass("add", "hidden", el.lightbox, el.overlay);
     }
 });
 
-// Turn off overlay if window resized > 769px (if overlay 'on' due to side menu being open)
+// TURN OFF OVERLAY if window resized > 769px:
 window.matchMedia("(min-width: 769px)").addEventListener("change", (e) => {
     if (e.matches) {
-        if (!OVERLAY.classList.contains("hidden")) {
-            modifyClass("add", "hidden", OVERLAY);
+        // reset slideshow:
+        slideIndex = 1;
+        fn.showSlides(slideIndex, el.primary_slides);
+
+        // turn off overlay if it was open:
+        if (!el.overlay.classList.contains("hidden")) {
+            fn.modifyClass("add", "hidden", el.overlay);
         }
     }
 });
 
-// BURGER BUTTON - OPENS SIDE MENU:
-document.querySelector(".menu").addEventListener("click", () => {
-    modifyClass("toggle", "hidden", OVERLAY, SIDE_MENU);
+// OPEN & CLOSE SLIDE MENU:
+document.querySelector(".nav").addEventListener("click", (e) => {
+    let eTar = e.target;
+    if (!eTar.matches("img")) return;
 
-    // needs to close the CART if open
-    if (!MODAL_EL.classList.contains("hidden")) {
-        MODAL_EL.classList.toggle("hidden");
-    }
-});
+    if (eTar.classList.contains("menu")) {
+        fn.modifyClass("toggle", "hidden", el.overlay, el.side_menu);
 
-// CLOSE SIDE MENU ON X CLICK:
-document.querySelector(".close-btn").addEventListener("click", () => {
-    // prevent overlay from being toggled on if it's already off due to recent window resize(s)
-    if (OVERLAY.classList.contains("hidden")) {
-        modifyClass("toggle", "hidden", SIDE_MENU);
-    } else {
-        modifyClass("toggle", "hidden", OVERLAY, SIDE_MENU);
-    }
-});
-
-// CHANGE ITEM QUANTITY:
-document.querySelectorAll(".quantity-btn").forEach((el) => {
-    el.addEventListener("click", () => {
-        // change qty based on value of images' alt: plus or minus
-        let n = el.alt;
-
-        if (n === "plus") {
-            quantity++;
-        } else if (n === "minus" && quantity > 0) {
-            quantity--;
-        } else {
-            // prevent quantity update if trying to go under 0
-            return;
+        if (!el.cart_modal.classList.contains("hidden")) {
+            el.cart_modal.classList.toggle("hidden");
         }
-        // update quantity #
-        document.querySelector(".quantity").textContent = quantity;
-    });
+    } else if (eTar.classList.contains("close-btn")) {
+        el.overlay.classList.contains("hidden")
+            ? fn.modifyClass("toggle", "hidden", el.side_menu)
+            : fn.modifyClass("toggle", "hidden", el.overlay, el.side_menu);
+    }
 });
 
-function updateCart() {
-    if (cartQty === 0) {
-        // if cart empty, switch to "cart is empty" modal content
-        MODAL_BODY.classList.remove("flex");
-        MODAL_BODY.classList.add("hidden");
-        MODAL_EMPTY.classList.remove("hidden");
-    } else {
-        // cart isn't empty - display product info, update # values
-        MODAL_BODY.classList.remove("hidden");
-        MODAL_BODY.classList.add("flex");
-        MODAL_EMPTY.classList.add("hidden");
-        document.querySelector(".modal-qty").textContent = cartQty;
-        let total = (cartQty * 125).toFixed(2);
-        document.querySelector(".modal-total").textContent = `$${total}`;
-    }
-}
+// UPDATE CART (counter / add to cart button):
+document.querySelector(".cart").addEventListener("click", (e) => {
+    let eTar = e.target;
 
-// ADD TO CART BUTTON - UPDATES CART QTY:
-document.querySelector(".cart-btn").addEventListener("click", () => {
-    cartQty += quantity;
-    document.querySelector(".nav-cart-qty").textContent = cartQty;
-    console.log(`total in cart: ${cartQty}`);
-    updateCart();
+    if (eTar.classList.contains("plus")) {
+        counter++;
+        document.querySelector(".counter").textContent = counter;
+    } else if (eTar.classList.contains("minus") && counter > 0) {
+        counter--;
+        document.querySelector(".counter").textContent = counter;
+    } else if (eTar.classList.contains("cart-btn")) {
+        cartQty += counter;
+        document.querySelector(".nav-cart-qty").textContent = cartQty;
+        console.log(`total in cart: ${cartQty}`);
+        fn.updateCart();
+    }
+});
+
+// OPEN CART:
+document.querySelector(".nav-cart-ctn").addEventListener("click", () => {
+    fn.modifyClass("toggle", "hidden", el.cart_modal);
+    // updates product info if "add to cart" clicked while cart open
+    fn.updateCart();
 });
 
 // CLICK CART DELETE BUTTON:
 document.querySelector(".delete-btn").addEventListener("click", () => {
     cartQty = 0;
-    modalTotal = 0;
     document.querySelector(".nav-cart-qty").textContent = cartQty;
-    updateCart();
+    fn.updateCart();
 });
 
-// CLICK CART BUTTON - toggles cart modal:
-document.querySelector(".nav-cart-ctn").addEventListener("click", () => {
-    modifyClass("toggle", "hidden", MODAL_EL);
-    // updates product info if "add to cart" clicked while cart open
-    updateCart();
-});
+// Initialize slides:
+fn.showSlides(slideIndex, el.primary_slides);
+fn.showSlides(slideIndex, el.lightbox_slides);
 
-// MAIN PRODUCT IMAGES SLIDESHOW:
-let slideIndex = 1;
-showSlides(slideIndex);
-
-function showSlides(n) {
-    let slides = document.getElementsByClassName("slides");
-
-    if (n > slides.length) {
-        slideIndex = 1;
-    }
-    if (n < 1) {
-        slideIndex = slides.length;
-    }
-
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    slides[slideIndex - 1].style.display = "block";
-}
-
-// IMAGE SLIDESHOW - 'PREVIOUS' ARROW BUTTON:
-document.querySelector(".previous").addEventListener("click", () => {
-    showSlides(--slideIndex);
-});
-
-// IMAGE SLIDESHOW - 'NEXT' ARROW BUTTON:
-document.querySelector(".next").addEventListener("click", () => {
-    showSlides(++slideIndex);
-});
-
-// THUMBNAIL IMAGE CLICK (image swap):
-document.querySelectorAll(".thumbnail").forEach((el) => {
-    el.addEventListener("click", () => {
-        let elImgSrc = el.getAttribute("src");
-        let swapSrc = `${elImgSrc.slice(0, 22)}.jpg`;
-        document.querySelector(".primary").src = swapSrc;
-    });
-});
-
-// Lightbox product modal:
-const LIGHTBOX = document.querySelector(".product-modal");
-
+// OPEN LIGHTBOX:
 document.querySelector(".primary").addEventListener("click", () => {
-    modifyClass("toggle", "hidden", LIGHTBOX, OVERLAY);
+    if (window.innerWidth < 769) return; // prevent opening lightbox at mobile sizes
+    fn.modifyClass("toggle", "hidden", el.lightbox, el.overlay);
 });
+
+// SLIDESHOW ARROWS:
+document.querySelector("main").addEventListener("click", (e) => {
+    let eTar = e.target;
+    if (!eTar.matches("img")) return;
+
+    if (eTar.classList.contains("primary-next")) {
+        fn.showSlides(++slideIndex, el.primary_slides);
+    } else if (eTar.classList.contains("primary-previous")) {
+        fn.showSlides(--slideIndex, el.primary_slides);
+    } else if (eTar.classList.contains("lb-next")) {
+        fn.showSlides(++slideIndex, el.lightbox_slides);
+    } else if (eTar.classList.contains("lb-previous")) {
+        fn.showSlides(--slideIndex, el.lightbox_slides);
+    } else if (eTar.classList.contains("thumbnail")) {
+        fn.thumbnailSwap();
+    }
+});
+
