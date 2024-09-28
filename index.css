@@ -16,6 +16,13 @@ body {
     font-family: "Kumbh Sans", sans-serif;
     margin: 0;
     background-color: var(--near-white);
+    /* disallow text highlighting */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 hr {
@@ -165,7 +172,7 @@ main {
     margin-right: 10px;
 }
 
-.cart .quantity-ctn {
+.cart .counter-ctn {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -175,7 +182,7 @@ main {
     background-color: hsl(233, 27%, 94%);
 }
 
-.cart .quantity-btn {
+.cart .counter-btn {
     cursor: pointer;
     padding: 10px;
 }
@@ -188,7 +195,7 @@ main {
     margin-left: 10px;
 }
 
-.cart .quantity {
+.cart .counter {
     font-weight: 700;
     font-size: 20px;
 }
@@ -216,12 +223,12 @@ main {
     transition: 0.5s;
 }
 
-.previous {
+.primary-previous {
     left: 0;
     margin-left: 10px;
 }
 
-.next {
+.primary-next {
     right: 0;
     margin-right: 10px;
 }
@@ -235,38 +242,6 @@ main {
     border-radius: 10px;
     height: 50px;
     width: 50px;
-}
-
-/* ========================================= */
-/* PRODUCT IMAGE LIGHTBOX
-/* ========================================= */
-
-.lightbox {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    /* display controlled by JS */
-    /* display: flex; */
-    margin-top: 4rem;
-}
-
-.lightbox .lb-slides {
-    height: 500px;
-    width: 500px;
-    border-radius: 10px;
-}
-
-.lb-thumbnail-ctn {
-    display: flex;
-    justify-content: center;
-    width: 500px;
-    margin-top: 1rem;
-}
-
-.lb-thumbnail-ctn img {
-    margin-right: 20px;
 }
 
 /* ========================================= */
@@ -291,7 +266,7 @@ main {
     margin: 10px 0;
 }
 
-.product-info .description {
+.description {
     color: var(--light-gray);
     line-height: 1.5em;
     /* matching quantity spacing */
@@ -436,6 +411,11 @@ main {
         padding: 0px 3rem;
     }
 
+    .overlay {
+        cursor: auto;
+        background-color: rgba(0, 0, 0, 0.808);
+    }
+
     .nav .title {
         font-size: 26px;
         margin-right: 1.5rem;
@@ -476,6 +456,7 @@ main {
         height: 100%;
         background-color: initial;
         padding: 0;
+        z-index: 1;
     }
 
     .side-menu li {
@@ -519,6 +500,10 @@ main {
         margin-top: 4rem;
     }
 
+    .img {
+        border-radius: 10px;
+    }
+
     .product-img-ctn {
         display: flex;
         justify-content: flex-end;
@@ -531,9 +516,6 @@ main {
     .product-img-ctn .product-img {
         width: 100%;
         max-width: 300px;
-        /* accounts for thumbnail size */
-        max-height: calc(300px - 60px);
-        border-radius: 10px;
     }
 
     .slideshow {
@@ -595,7 +577,7 @@ main {
         align-items: center;
     }
 
-    .cart .quantity-ctn {
+    .cart .counter-ctn {
         width: 175px;
         margin-right: 20px;
     }
@@ -612,26 +594,65 @@ main {
         cursor: pointer;
     }
 
+    .lightbox {
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        /* display controlled by JS */
+        /* display: flex; */
+    }
+
     .lb-slideshow {
         height: 500px;
         width: 500px;
         position: relative;
     }
 
+    .lightbox .lb-slides {
+        height: 500px;
+        width: 500px;
+        border-radius: 10px;
+    }
+
+    .lb-thumbnail-ctn {
+        display: flex;
+        justify-content: center;
+        width: 500px;
+        margin-top: 1rem;
+    }
+
+    .lb-thumbnail-ctn img {
+        margin-right: 20px;
+    }
+
+    .lb-close {
+        float: right;
+        margin-bottom: 20px;
+        height: 25px;
+        filter: invert(70%) sepia(23%) saturate(7488%) hue-rotate(3deg)
+            brightness(106%) contrast(93%);
+    }
+
+    .lb-close:hover {
+        cursor: pointer;
+    }
+
     .lb-arrows {
         cursor: pointer;
         position: absolute;
-        top: 50%;
+        top: calc(50% + 15px);
         border-radius: 50%;
         background-color: white;
         padding: 15px;
     }
 
-    .previous {
-        left: -30px;
+    .lb-previous {
+        left: -20px;
     }
 
-    .next {
-        right: -30px;
+    .lb-next {
+        right: -20px;
     }
 }
